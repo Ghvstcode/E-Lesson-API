@@ -1,0 +1,9 @@
+# Ignore Node Module.
+node_modules
+
+# Ignore built files
+build
+
+# Ignore Environment varibles
+*.env
+*.env.*
