@@ -7,3 +7,6 @@ build
 # Ignore Environment varibles
 *.env
 *.env.*
+
+# Ignore Logs
+logs

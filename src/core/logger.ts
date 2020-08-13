@@ -1,5 +1,4 @@
 /* eslint-disable import/order */
-/* eslint-disable babel/object-curly-spacing */
 import fs from 'fs';
 import path from 'path';
 import { createLogger, transports, format } from 'winston';
@@ -15,17 +14,12 @@ if (!fs.existsSync(dir)) {
   fs.mkdirSync(dir);
 }
 
-let logLevel;
-if (environment === 'development') {
-  logLevel = 'debug';
-} else {
-  logLevel = 'warn';
-}
+const logLevel = environment === 'development' ? 'debug' : 'warn';
 
 const options = {
   file: {
     level: logLevel,
-    filename: `${dir} + ${Date.now()}+ '.log'`,
+    filename: dir + '/%DATE%.log',
     datePattern: 'YYYY-MM-DD',
     zippedArchive: true,
     timestamp: true,

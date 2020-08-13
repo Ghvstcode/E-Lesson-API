@@ -32,6 +32,8 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "@types/cors": "^2.8.7",
+    "cors": "^2.8.5",
     "mongoose": "^5.9.28",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.0"
