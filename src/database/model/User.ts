@@ -1,12 +1,17 @@
 import { model, Schema, Document } from 'mongoose';
-import Role from './Role';
-
+//import Role from './Role';
+export const enum Role {
+  ADMIN = 'ADMIN',
+  TUTOR = 'TUTOR',
+  STUDENT = 'STUDENT',
+}
 export default interface User extends Document {
   name: string;
   email?: string;
   password?: string;
   profilePicUrl?: string;
   roles: Role[];
+  tokens: [];
   verified?: boolean;
   status?: boolean;
   createdAt?: Date;
@@ -26,7 +31,6 @@ const UserSchema = new Schema(
       required: true,
       unique: true,
       trim: true,
-      select: false,
       // validate(value: string) {
       //   if (!validator.isEmail(value)) {
       //     throw new Error('Provide a valid email');
@@ -42,18 +46,23 @@ const UserSchema = new Schema(
       trim: true,
     },
     roles: {
-      type: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: 'Role',
-        },
-      ],
+      type: Schema.Types.String,
       required: true,
-      select: false,
     },
+    tokens: [
+      {
+        acessToken: {
+          type: String,
+          required: true,
+        },
+        refreshToken: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
     verified: {
       type: Schema.Types.Boolean,
-      default: false,
     },
     status: {
       type: Schema.Types.Boolean,

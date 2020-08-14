@@ -33,7 +33,9 @@
   },
   "dependencies": {
     "@types/cors": "^2.8.7",
+    "@types/jsonwebtoken": "^8.5.0",
     "cors": "^2.8.5",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.28",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.0"

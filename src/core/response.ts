@@ -21,7 +21,7 @@ abstract class ApiResponse {
         delete target[i];
       }
     }
-    return res.status(this.status).json(target);
+    return res.status(this.statusCode).json(target);
   }
 
   public send(res: Response): Response {
@@ -48,5 +48,11 @@ export class SuccessMsgResponse<T> extends ApiResponse {
 export class ErrorResponse<T> extends ApiResponse {
   constructor(statusCode: number, message: string) {
     super(Status.FAILURE, statusCode, message);
+  }
+}
+
+export class InternalErrorResponse<T> extends ApiResponse {
+  constructor(message: string) {
+    super(Status.FAILURE, 500, message);
   }
 }
