@@ -1,8 +1,8 @@
 import { Response } from 'express';
 
 enum Status {
-  SUCCESS,
-  FAILURE,
+  SUCCESS = 'SUCCESS',
+  FAILURE = 'FAILURE',
 }
 
 abstract class ApiResponse {

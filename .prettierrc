@@ -3,5 +3,5 @@
   "trailingComma": "all",
   "singleQuote": true,
   "printWidth": 80,
-  "object-curly-spacing": ["never"]
+  "object-curly-spacing": "never"
 }
