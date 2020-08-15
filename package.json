@@ -32,7 +32,9 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "@hapi/joi": "^17.1.1",
     "@types/cors": "^2.8.7",
+    "@types/hapi__joi": "^17.1.4",
     "@types/jsonwebtoken": "^8.5.0",
     "cors": "^2.8.5",
     "jsonwebtoken": "^8.5.1",
