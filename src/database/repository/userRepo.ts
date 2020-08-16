@@ -6,9 +6,9 @@ import { Document } from 'mongoose';
 import crypto from 'crypto';
 
 export default class UserRepo {
-  private async set(user: User, roleCode: Role): Promise<Document> {
+  private static async set(user: User, roleCode: string): Promise<Document> {
     const now = new Date();
-    user.roles = [roleCode];
+    user.roles = roleCode;
     user.createdAt = user.updatedAt = now;
     //const createdUser = await userModel.create(user);
     const createdUser = new userModel(user);
@@ -16,7 +16,7 @@ export default class UserRepo {
     return createdUser;
   }
 
-  private genAuthToken<T extends UserRepo>(user: Document): T {
+  private static genAuthToken<T extends UserRepo>(user: Document): T {
     const tokens: T = {} as T;
     const _id = user._id.toString();
     const realUser = user.toObject();
@@ -30,13 +30,21 @@ export default class UserRepo {
     return tokens;
   }
 
-  public async Create(
+  public static async Create(
     user: User,
-    roleCode: Role,
+    roleCode: string,
   ): Promise<{ user: User; tokens: Object }> {
     const createdUser = await this.set(user, roleCode);
     const tokens = this.genAuthToken(createdUser);
     await createdUser.save();
     return { user: createdUser.toObject(), tokens: tokens };
+  }
+
+  public static async findByEmail(email: string): Promise<User | null> {
+    const reUser = await userModel
+      .findOne({ email: email })
+      .lean<User>()
+      .exec();
+    return reUser;
   }
 }

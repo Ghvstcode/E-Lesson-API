@@ -10,7 +10,7 @@ export default interface User extends Document {
   email?: string;
   password?: string;
   profilePicUrl?: string;
-  roles: Role[];
+  roles: string;
   tokens: [];
   verified?: boolean;
   status?: boolean;
@@ -84,4 +84,4 @@ const UserSchema = new Schema(
   },
 );
 
-export const userModel = model('User', UserSchema);
+export const userModel = model<User>('User', UserSchema);
