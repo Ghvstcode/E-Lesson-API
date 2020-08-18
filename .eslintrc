@@ -5,11 +5,11 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:shopify/esnext"
+    "plugin:@typescript-eslint/recommended"
+    //"plugin:shopify/esnext"
   ],
   "rules": {
-    "no-console": 0
+    "no-console": 1
     //"object-curly-spacing": ["never"]
   },
   "settings": {

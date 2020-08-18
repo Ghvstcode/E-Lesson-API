@@ -1,4 +1,3 @@
-/* eslint-disable import/newline-after-import */
 import app from './app';
 import logger from './core/logger';
 import { port, environment } from './config';

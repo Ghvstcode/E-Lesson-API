@@ -1,6 +1,6 @@
 import User, { userModel, Role } from '../model/User';
-import { InternalErrorResponse } from 'core/response';
-import { jwtSecret } from 'config';
+import { InternalErrorResponse } from '../../core/response';
+import { jwtSecret } from '../../config';
 import jwt from 'jsonwebtoken';
 import { Document } from 'mongoose';
 import crypto from 'crypto';
@@ -16,13 +16,14 @@ export default class UserRepo {
     return createdUser;
   }
 
-  private static genAuthToken<T extends UserRepo>(user: Document): T {
-    const tokens: T = {} as T;
-    const _id = user._id.toString();
+  private static genAuthToken(user: Document): Object {
+    const tokens = {};
+    // const name = user.toObject();
+    //console.log('id', _id);
     const realUser = user.toObject();
-    const Acesstoken = jwt.sign(_id, jwtSecret!, { expiresIn: '10m' });
+    const Acesstoken = jwt.sign(realUser.name, jwtSecret!);
     const Refreshtoken = crypto.randomBytes(20).toString('hex');
-    realUser.token = realUser.token.concat(
+    realUser.token = realUser.token.push(
       { Acesstoken: Acesstoken },
       { Refreshtoken: Refreshtoken },
     );
@@ -35,6 +36,7 @@ export default class UserRepo {
     roleCode: string,
   ): Promise<{ user: User; tokens: Object }> {
     const createdUser = await this.set(user, roleCode);
+    console.log(createdUser);
     const tokens = this.genAuthToken(createdUser);
     await createdUser.save();
     return { user: createdUser.toObject(), tokens: tokens };

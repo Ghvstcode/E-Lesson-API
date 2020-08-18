@@ -1,7 +1,7 @@
 import Joi from '@hapi/joi';
 import { Request, Response, NextFunction } from 'express';
 import logger from '../core/logger';
-import { ErrorResponse } from 'core/response';
+import { ErrorResponse } from '../core/response';
 
 export default (schema: Joi.ObjectSchema) => (
   req: Request,
@@ -16,10 +16,10 @@ export default (schema: Joi.ObjectSchema) => (
     const message = details
       .map((i) => i.message.replace(/['"]+/g, ''))
       .join(',');
-    logger.error(message);
 
-    next(new ErrorResponse(400, message));
+    next(new ErrorResponse(400, message).send(res));
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

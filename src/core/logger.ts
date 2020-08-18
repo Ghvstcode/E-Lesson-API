@@ -1,4 +1,3 @@
-/* eslint-disable import/order */
 import fs from 'fs';
 import path from 'path';
 import { createLogger, transports, format } from 'winston';
