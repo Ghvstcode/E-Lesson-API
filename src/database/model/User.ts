@@ -7,7 +7,6 @@ export default interface User extends Document {
   profilePicUrl?: string;
   roles: string;
   verified?: boolean;
-  status?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -46,10 +45,6 @@ const UserSchema = new Schema(
     },
     verified: {
       type: Schema.Types.Boolean,
-    },
-    status: {
-      type: Schema.Types.Boolean,
-      default: true,
     },
     createdAt: {
       type: Date,

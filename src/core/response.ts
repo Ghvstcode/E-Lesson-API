@@ -1,8 +1,8 @@
 import { Response } from 'express';
 
 enum Status {
-  SUCCESS = 'SUCCESS',
-  FAILURE = 'FAILURE',
+  SUCCESS = 'true',
+  FAILURE = 'false',
 }
 
 abstract class ApiResponse {
@@ -15,15 +15,12 @@ abstract class ApiResponse {
   protected create<T extends ApiResponse>(res: Response, data: T): Response {
     const target: T = {} as T;
     Object.assign(target, data);
-    //delete target.message;
     for (const i in target) {
       if (typeof target[i] === 'undefined') {
         delete target[i];
       }
     }
-    console.log(target.message);
-    //return res.status(this.statusCode).json(target);
-    return res.send(target);
+    return res.status(this.statusCode).json(target);
   }
 
   protected createErr<T extends ApiResponse>(res: Response, data: T): Response {
