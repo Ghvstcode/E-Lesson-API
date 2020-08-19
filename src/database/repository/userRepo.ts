@@ -1,4 +1,4 @@
-import User, { userModel, Role } from '../model/User';
+import User, { userModel } from '../model/User';
 import { InternalErrorResponse } from '../../core/response';
 import { jwtSecret } from '../../config';
 import jwt from 'jsonwebtoken';
@@ -6,9 +6,9 @@ import { Document } from 'mongoose';
 import crypto from 'crypto';
 
 export default class UserRepo {
-  private static async set(user: User, roleCode: string): Promise<Document> {
+  private static async set(user: User): Promise<Document> {
     const now = new Date();
-    user.roles = roleCode;
+    // user.roles = roleCode;
     user.createdAt = user.updatedAt = now;
     //const createdUser = await userModel.create(user);
     const createdUser = new userModel(user);
@@ -17,25 +17,24 @@ export default class UserRepo {
   }
 
   private static genAuthToken(user: Document): Object {
-    const tokens = {};
+    const token = {};
     // const name = user.toObject();
     //console.log('id', _id);
     const realUser = user.toObject();
-    const Acesstoken = jwt.sign(realUser.name, jwtSecret!);
-    const Refreshtoken = crypto.randomBytes(20).toString('hex');
-    realUser.token = realUser.token.push(
-      { Acesstoken: Acesstoken },
-      { Refreshtoken: Refreshtoken },
-    );
-    Object.assign(tokens, Refreshtoken, Acesstoken);
-    return tokens;
+    const tokens = {
+      Acesstoken: jwt.sign(realUser.name, jwtSecret!),
+      refreshtoken: crypto.randomBytes(20).toString('hex'),
+    };
+    Object.assign(token, tokens);
+    console.log('token', token);
+    return token;
   }
 
   public static async Create(
     user: User,
-    roleCode: string,
+    // roleCode: string,
   ): Promise<{ user: User; tokens: Object }> {
-    const createdUser = await this.set(user, roleCode);
+    const createdUser = await this.set(user);
     console.log(createdUser);
     const tokens = this.genAuthToken(createdUser);
     await createdUser.save();

@@ -1,17 +1,11 @@
 import { model, Schema, Document } from 'mongoose';
-//import Role from './Role';
-export const enum Role {
-  ADMIN = 'ADMIN',
-  TUTOR = 'TUTOR',
-  STUDENT = 'STUDENT',
-}
+
 export default interface User extends Document {
   name: string;
   email?: string;
   password?: string;
   profilePicUrl?: string;
   roles: string;
-  tokens: [];
   verified?: boolean;
   status?: boolean;
   createdAt?: Date;
@@ -48,19 +42,8 @@ const UserSchema = new Schema(
     roles: {
       type: Schema.Types.String,
       required: true,
+      enum: ['ADMIN', 'TUTOR', 'STUDENT'],
     },
-    tokens: [
-      {
-        acessToken: {
-          type: String,
-          required: true,
-        },
-        refreshToken: {
-          type: String,
-          required: true,
-        },
-      },
-    ],
     verified: {
       type: Schema.Types.Boolean,
     },

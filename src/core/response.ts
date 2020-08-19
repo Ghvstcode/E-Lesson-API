@@ -15,13 +15,23 @@ abstract class ApiResponse {
   protected create<T extends ApiResponse>(res: Response, data: T): Response {
     const target: T = {} as T;
     Object.assign(target, data);
-    delete target.status;
+    //delete target.message;
     for (const i in target) {
       if (typeof target[i] === 'undefined') {
         delete target[i];
       }
     }
-    return res.status(this.statusCode).json(target);
+    console.log(target.message);
+    //return res.status(this.statusCode).json(target);
+    return res.send(target);
+  }
+
+  protected createErr<T extends ApiResponse>(res: Response, data: T): Response {
+    const target: T = {} as T;
+    Object.assign(target, data);
+    const tar: T = {} as T;
+    Object.assign(tar, target.message);
+    return res.status(this.statusCode).json(tar);
   }
 
   public send(res: Response): Response {
@@ -48,6 +58,9 @@ export class SuccessMsgResponse<T> extends ApiResponse {
 export class ErrorResponse<T> extends ApiResponse {
   constructor(statusCode: number, message: string) {
     super(Status.FAILURE, statusCode, message);
+  }
+  send(res: Response): Response {
+    return super.createErr<ErrorResponse<T>>(res, this);
   }
 }
 

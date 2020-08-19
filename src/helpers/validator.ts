@@ -17,7 +17,7 @@ export default (schema: Joi.ObjectSchema) => (
       .map((i) => i.message.replace(/['"]+/g, ''))
       .join(',');
 
-    next(new ErrorResponse(400, message).send(res));
+    next(new ErrorResponse(400, message));
   } catch (error) {
     console.log(error);
     next(error);
