@@ -15,7 +15,7 @@ export default class UserRepo {
     return createdUser;
   }
 
-  private static genAuthToken(user: Document): Record<string, unknown> {
+  public static genAuthToken(user: Document): Record<string, unknown> {
     const token = {};
     const realUser = user.toObject();
 
@@ -23,7 +23,9 @@ export default class UserRepo {
       Acesstoken: jwt.sign({ name: realUser.name }, jwtSecret!, {
         expiresIn: '2h',
       }),
-      refreshtoken: crypto.randomBytes(20).toString('hex'),
+      refreshtoken: jwt.sign({ id: realUser._id }, jwtSecret!, {
+        expiresIn: '2h',
+      }),
     };
 
     Object.assign(token, tokens);
