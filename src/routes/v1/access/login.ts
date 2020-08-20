@@ -7,19 +7,32 @@ import {
   SuccessResponse,
   ErrorResponse,
 } from '../../../core/response';
+import User, { userModel } from '../../../database/model/User';
 
 export const login = async (req: Request, res: Response): Promise<Response> => {
+  const find = async (): Promise<User> => {
+    const a = await userModel.findOne({ email: req.body.email }, (err, doc) => {
+      if (err) throw new InternalErrorResponse(err);
+      if (!doc) throw new InternalErrorResponse('User does not exist');
+      return { doc };
+    });
+    return a!;
+  };
   try {
-    const user = await UserRepo.findByEmail(req.body.email);
-    if (!user) throw new InternalErrorResponse('User does not exist');
-    if (!req.body.password)
-      throw new InternalErrorResponse('User does not exist');
+    const document = await find();
+
+    const tokens = UserRepo.genAuthToken(document);
+    const user = document.toObject();
+    if (!req.body.password) {
+      throw new InternalErrorResponse('Bad credentials');
+    }
 
     const match = await bcrypt.compare(req.body.password, user.password!);
     if (!match) throw new InternalErrorResponse('Authentication failure');
 
-    const tokens = UserRepo.genAuthToken(user);
-    return new SuccessResponse(201, 'Created New User', {
+    user.password = '';
+    //const tokens = UserRepo.genAuthToken(user);
+    return new SuccessResponse(200, 'Logged in User', {
       user,
       tokens,
     }).send(res);

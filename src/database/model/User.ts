@@ -32,7 +32,7 @@ const UserSchema = new Schema(
     },
     password: {
       type: Schema.Types.String,
-      select: false,
+      required: true,
     },
     profilePicUrl: {
       type: Schema.Types.String,
