@@ -1,13 +1,12 @@
 import Joi from '@hapi/joi';
 import { Request, Response, NextFunction } from 'express';
-import logger from '../core/logger';
 import { ErrorResponse } from '../core/response';
 
 export default (schema: Joi.ObjectSchema) => (
   req: Request,
   res: Response,
   next: NextFunction,
-) => {
+): any => {
   try {
     const { error } = schema.validate(req.body);
     if (!error) return next();
@@ -19,7 +18,6 @@ export default (schema: Joi.ObjectSchema) => (
 
     next(new ErrorResponse(400, message));
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

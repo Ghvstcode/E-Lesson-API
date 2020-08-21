@@ -18,10 +18,10 @@ export default class UserRepo {
     //const realUser = user.toObject();
     const secret: string = jwtSecret!;
     const tokens = {
-      Acesstoken: jwt.sign({ name: realUser.name }, secret, {
+      Acesstoken: jwt.sign({ id: realUser._id, rf: false }, secret, {
         expiresIn: '2h',
       }),
-      refreshtoken: jwt.sign({ id: realUser._id }, secret, {
+      refreshtoken: jwt.sign({ id: realUser._id, rf: true }, secret, {
         expiresIn: '2days',
       }),
     };

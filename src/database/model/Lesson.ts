@@ -8,7 +8,7 @@ export default interface Lesson extends Document {
   description: string;
   isPublished?: boolean;
   publishedAt?: Date;
-  tags: string[];
+  category: string;
   owner: User;
   createdAt?: Date;
   updatedAt?: Date;
@@ -39,14 +39,19 @@ const LessonSchema = new Schema(
       required: true,
       maxlength: 350,
     },
+    category: {
+      type: Schema.Types.String,
+      required: true,
+      enum: ['Science', 'Arts', 'Commerce', 'Random'],
+    },
     isPublished: {
       type: Schema.Types.Boolean,
       default: false,
     },
     publishedAt: {
       type: Date,
-      required: true,
       select: false,
+      default: null,
     },
     createdAt: {
       type: Date,
