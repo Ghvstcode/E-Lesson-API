@@ -6,7 +6,7 @@ import bodyparser from 'body-parser';
 import routesV1 from './routes/v1/index';
 
 process.on('uncaughtException', (e) => {
-  console.log(e);
+  console.log('e1', e);
   logger.error(e);
 });
 

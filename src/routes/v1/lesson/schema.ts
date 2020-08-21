@@ -3,7 +3,7 @@ export default {
   newLesson: Joi.object().keys({
     courseTitle: Joi.string().required(),
     courseContent: Joi.string().required(),
-    description: Joi.string().required().min(350),
+    description: Joi.string().required().max(350),
     category: Joi.string().required(),
   }),
   //   login: Joi.object().keys({

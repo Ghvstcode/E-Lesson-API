@@ -12,7 +12,7 @@ export default class LessonRepo {
     return createdBlog.toObject();
   }
 
-  public static findLessonByTitle(title: string): Promise<Lesson[]> {
-    return lessonModel.find({ courseTitle: title }).lean<Lesson>().exec();
+  public static findLessonByTitle(title: string): Promise<Lesson | null> {
+    return lessonModel.findOne({ courseTitle: title }).lean<Lesson>().exec();
   }
 }

@@ -8,7 +8,7 @@ import isAuthenticated from '../../helpers/auth';
 
 const router = express.Router();
 
-router.use('/user', basicSignup);
+// router.use('/user', basicSignup);
 router.use('/user', login);
 router.use('/lesson', newLesson);
 // router.use('/login', validator(schema.login), login);

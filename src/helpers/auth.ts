@@ -34,14 +34,18 @@ export default () => async (
   req: Request,
   res: Response,
   next: NextFunction,
-): Promise<void> => {
+) => {
   try {
+    console.log('Helloauth');
     // const token = req.headers.Authorization.replace('Bearer ', '');
     const token = req.headers.authorization?.replace('Bearer ', '');
     if (token == undefined)
       throw new InternalErrorResponse('Malformed Auth token');
     const decoded = Jwt.verify(token, jwtSecret!);
+    console.log('Auth', req.body);
     console.log(decoded);
+    throw new InternalErrorResponse('UnAuthorized!');
+    return next();
     // if(!decoded.rf){
     //     throw new InternalErrorResponse('UnAuthorized!');
     // }
@@ -49,7 +53,8 @@ export default () => async (
     // _id: decoded.id,
     // });
     // req.user = user
-  } catch (e) {
-    //
+  } catch (error) {
+    new ErrorResponse(500, 'errorfromauth').send(res);
+    return next();
   }
 };

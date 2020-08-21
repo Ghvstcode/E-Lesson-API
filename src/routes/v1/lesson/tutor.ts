@@ -8,12 +8,13 @@ import {
 import Lesson from '../../../database/model/Lesson';
 import validator from '../../../helpers/validator';
 import schema from './schema';
+import { resolve } from 'path';
 import isAuthenticated from '../../../helpers/auth';
 
 const router = express.Router();
 export default router.post(
   '/new',
-  validator(schema.newLesson),
+  //validator(schema.newLesson),
   isAuthenticated,
   async (req: Request, res: Response): Promise<Response> => {
     let msg;
@@ -31,7 +32,6 @@ export default router.post(
         category: req.body.category,
         //owner: req.user._id
       } as Lesson);
-
       if (createdLesson.isPublished) {
         msg = 'Published new lesson';
       } else {
@@ -42,6 +42,7 @@ export default router.post(
         createdLesson,
       }).send(res);
     } catch (e) {
+      //console.log('tt', e);
       return new ErrorResponse(500, e).send(res);
     }
   },
