@@ -30,31 +30,57 @@ import { ErrorResponse, InternalErrorResponse } from '../core/response';
 import { jwtSecret } from '../config';
 import { userModel } from 'database/model/User';
 
-export default () => async (
+// export default () => async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction,
+// ) => {
+//   try {
+//     console.log('Helloauth');
+//     //return next();
+// // const token = req.headers.Authorization.replace('Bearer ', '');
+// const token = req.headers.authorization?.replace('Bearer ', '');
+// if (token == undefined)
+//   throw new InternalErrorResponse('Malformed Auth token');
+// const decoded = Jwt.verify(token, jwtSecret!);
+// console.log('Auth', req.body);
+// console.log(decoded);
+// //throw new InternalErrorResponse('UnAuthorized!');
+//     return next();
+//     // if(!decoded.rf){
+//     //     throw new InternalErrorResponse('UnAuthorized!');
+//     // }
+//     // const user = await userModel.findOne({
+//     // _id: decoded.id,
+//     // });
+//     // req.user = user
+//   } catch (error) {
+//     new ErrorResponse(500, 'errorfromauth').send(res);
+//     return next();
+//   }
+// };
+
+export const isAuthenticated = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    console.log('Helloauth');
     // const token = req.headers.Authorization.replace('Bearer ', '');
     const token = req.headers.authorization?.replace('Bearer ', '');
     if (token == undefined)
       throw new InternalErrorResponse('Malformed Auth token');
-    const decoded = Jwt.verify(token, jwtSecret!);
-    console.log('Auth', req.body);
-    console.log(decoded);
-    throw new InternalErrorResponse('UnAuthorized!');
-    return next();
-    // if(!decoded.rf){
-    //     throw new InternalErrorResponse('UnAuthorized!');
-    // }
-    // const user = await userModel.findOne({
-    // _id: decoded.id,
-    // });
-    // req.user = user
+    const decoded = <Record<string, unknown>>Jwt.verify(token, jwtSecret!);
+    //if (typeof decoded == "object"){
+    //console.log(decoded.rf);
+    //}
+    //console.log(decoded.rf);
+    // console.log('Auth', req.body);
+    // console.log('decoded', decoded);
+    //throw new InternalErrorResponse('UnAuthorized!');
+    next();
   } catch (error) {
-    new ErrorResponse(500, 'errorfromauth').send(res);
-    return next();
+    //new ErrorResponse(500, error).send(res);
+    return next(error);
   }
 };

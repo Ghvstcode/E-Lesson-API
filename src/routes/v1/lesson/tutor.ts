@@ -9,13 +9,13 @@ import Lesson from '../../../database/model/Lesson';
 import validator from '../../../helpers/validator';
 import schema from './schema';
 import { resolve } from 'path';
-import isAuthenticated from '../../../helpers/auth';
+import { isAuthenticated } from '../../../helpers/auth';
 
 const router = express.Router();
 export default router.post(
   '/new',
-  //validator(schema.newLesson),
-  isAuthenticated,
+  validator(schema.newLesson),
+  //isAuthenticated,
   async (req: Request, res: Response): Promise<Response> => {
     let msg;
     try {
@@ -42,8 +42,9 @@ export default router.post(
         createdLesson,
       }).send(res);
     } catch (e) {
-      //console.log('tt', e);
+      console.log('tt', e);
       return new ErrorResponse(500, e).send(res);
     }
   },
 );
+//    "courseTitle": "Lesson102",

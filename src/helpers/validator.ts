@@ -16,9 +16,10 @@ export default (schema: Joi.ObjectSchema) => (
       .map((i) => i.message.replace(/['"]+/g, ''))
       .join(',');
     //next();
+    console.log(message);
     throw new InternalErrorResponse(message);
   } catch (error) {
-    new ErrorResponse(500, error).send(res);
-    return next();
+    //new ErrorResponse(500, error).send(res);
+    return next(error);
   }
 };

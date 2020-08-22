@@ -4,7 +4,6 @@ import login from './access/login';
 import newLesson from './lesson/tutor';
 import schema from './access/schema';
 import validator from '../../helpers/validator';
-import isAuthenticated from '../../helpers/auth';
 
 const router = express.Router();
 

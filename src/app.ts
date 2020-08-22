@@ -4,9 +4,10 @@ import cors from 'cors';
 import './database';
 import bodyparser from 'body-parser';
 import routesV1 from './routes/v1/index';
+import errhandler from './helpers/error';
 
 process.on('uncaughtException', (e) => {
-  console.log('e1', e);
+  //console.log('e1', e);
   logger.error(e);
 });
 
@@ -19,5 +20,5 @@ app.use('/v1', routesV1);
 app.get('/', (req: Request, res: Response) => {
   res.send('Hi');
 });
-
+app.use(errhandler);
 export default app;
