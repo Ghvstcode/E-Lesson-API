@@ -17,7 +17,7 @@ export default router.post(
   validator(schema.signup),
   async (req: Request, res: Response): Promise<Response> => {
     try {
-      const user = await UserRepo.findByEmail(req.body.email);
+      const user = await UserRepo.findUserByEmail(req.body.email);
       if (user) throw new InternalErrorResponse('User already Exists');
 
       const password = await bcrypt.hash(req.body.password, 10);

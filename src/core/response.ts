@@ -72,8 +72,14 @@ export class InternalErrorResponse<T> extends ApiResponse {
 }
 
 export class HttpException extends Error {
-  constructor(status: number, message: any) {
+  status: boolean;
+  statusCode: number;
+  message: string;
+  constructor(message: any) {
     super(message);
+    this.status = message.status;
+    this.statusCode = message.statusCode;
+    this.message = message.message;
   }
 }
 

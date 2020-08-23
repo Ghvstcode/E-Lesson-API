@@ -28,7 +28,7 @@ const LessonSchema = new Schema(
     },
     courseInstructor: {
       type: Schema.Types.String,
-      //required: true,
+      required: true,
     },
     courseContent: {
       type: Schema.Types.String,

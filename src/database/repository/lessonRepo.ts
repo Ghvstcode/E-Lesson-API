@@ -15,4 +15,8 @@ export default class LessonRepo {
   public static findLessonByTitle(title: string): Promise<Lesson | null> {
     return lessonModel.findOne({ courseTitle: title }).lean<Lesson>().exec();
   }
+
+  public static findLessonByID(id: string): Promise<Lesson | null> {
+    return lessonModel.findOne({ _id: id }).lean<Lesson>().exec();
+  }
 }

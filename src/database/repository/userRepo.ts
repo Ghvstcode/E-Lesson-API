@@ -39,11 +39,16 @@ export default class UserRepo {
     return { user: createdUser.toObject(), tokens: tokens };
   }
 
-  public static async findByEmail(email: string): Promise<User | null> {
+  public static async findUserByEmail(email: string): Promise<User | null> {
     const reUser = await userModel
       .findOne({ email: email })
       .lean<User>()
       .exec();
+    return reUser;
+  }
+
+  public static async findUserByID(Id: string): Promise<User | null> {
+    const reUser = await userModel.findOne({ _id: Id }).lean<User>().exec();
     return reUser;
   }
 }

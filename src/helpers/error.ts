@@ -7,19 +7,9 @@ export default (
   response: Response,
   next: NextFunction,
 ): Response => {
-  return response.send({
-    error,
+  return response.status(error.statusCode).send({
+    status: error.status,
+    statusCode: error.statusCode,
+    message: error.message,
   });
 };
-// export default (
-
-// ) => {
-//   const status = error.status || 500;
-//   const message = error.message || 'Something went wrong';
-//   response.status(status).send({
-//     status,
-//     message,
-//   });
-// }
-
-// export default errorMiddleware;
