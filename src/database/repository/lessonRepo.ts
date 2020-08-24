@@ -19,4 +19,12 @@ export default class LessonRepo {
   public static findLessonByID(id: string): Promise<Lesson | null> {
     return lessonModel.findOne({ _id: id }).lean<Lesson>().exec();
   }
+
+  public static findAndUpdateLesson(lesson: Lesson): Promise<any> {
+    lesson.updatedAt = new Date();
+    return lessonModel
+      .updateOne({ _id: lesson._id }, { $set: { ...lesson } })
+      .lean<Lesson>()
+      .exec();
+  }
 }
