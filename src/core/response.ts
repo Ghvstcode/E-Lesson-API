@@ -24,12 +24,10 @@ abstract class ApiResponse {
   }
 
   protected createErr<T extends ApiResponse>(res: Response, data: T): Response {
-    //console.log('data', data);
     const target: T = {} as T;
     Object.assign(target, data);
     const tar: T = {} as T;
     Object.assign(tar, target.message);
-    console.log('tar', tar);
     return res.status(this.statusCode).json(tar);
   }
 
@@ -56,7 +54,6 @@ export class SuccessMsgResponse<T> extends ApiResponse {
 
 export class ErrorResponse<T> extends ApiResponse {
   constructor(statusCode: number, message: string) {
-    console.log('mess', message);
     super(Status.FAILURE, statusCode, message);
   }
 

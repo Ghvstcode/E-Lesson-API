@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import logger from './core/logger';
 import cors from 'cors';
 import './database';

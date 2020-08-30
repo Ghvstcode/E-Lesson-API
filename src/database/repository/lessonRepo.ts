@@ -1,6 +1,5 @@
 import Lesson, { lessonModel } from '../model/Lesson';
 import UserRepo from './userRepo';
-import { InternalErrorResponse } from 'core/response';
 
 export default class LessonRepo {
   public static async Create(lesson: Lesson): Promise<Lesson> {

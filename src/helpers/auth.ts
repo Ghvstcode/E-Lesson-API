@@ -1,14 +1,13 @@
 import { Response, NextFunction, Request } from 'express';
 import Jwt from 'jsonwebtoken';
-import { InternalErrorResponse, ErrorResponse } from '../core/response';
+import { ErrorResponse } from '../core/response';
 import { jwtSecret } from '../config';
-import { UserRequest } from '../types/request';
 
 export const isAuthenticated = async (
   req: Request,
   res: Response,
   next: NextFunction,
-) => {
+): Promise<void> => {
   try {
     const token = req.headers.authorization?.replace('Bearer ', '');
     if (token == undefined)
