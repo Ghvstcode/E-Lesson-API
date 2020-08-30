@@ -22,7 +22,7 @@ export default class UserRepo {
         expiresIn: '2h',
       }),
       refreshtoken: jwt.sign({ id: realUser._id, rf: true }, secret, {
-        expiresIn: '2days',
+        expiresIn: '10days',
       }),
     };
 

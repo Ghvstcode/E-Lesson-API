@@ -10,7 +10,6 @@ import validator from '../../../helpers/validator';
 import schema from './schema';
 import { isAuthenticated } from '../../../helpers/auth';
 import UserRepo from '../../../database/repository/userRepo';
-import { Types } from 'mongoose';
 
 const router = express.Router();
 export const newLesson = router.post(
@@ -56,21 +55,86 @@ export const newLesson = router.post(
     }
   },
 );
-//  "courseTitle": "Lesson102",
 
 export const updateLesson = router.put(
   '/update/:id',
   validator(schema.newLesson),
   isAuthenticated,
   async (req: Request, res: Response) => {
-    const lesson = await LessonRepo.findLessonByID(req.params.id);
-    if(!lesson) throw new InternalErrorResponse('Blog does not exists');
-    if (!lesson.owner.equals(res.locals.payload)) throw new InternalErrorResponse('You are not permitted to update');
-    if (req.body.courseTitle) lesson.courseTitle = req.body.courseTitle 
-    if (req.body.category) lesson.category = req.body.category; 
-    if (req.body.courseContent) lesson.courseContent = req.body.courseContent; 
-    if (req.body.description) lesson.description = req.body.description; 
-    await LessonRepo.findAndUpdateLesson(lesson)
-    new SuccessResponse(201, 'Blog updated successfully', lesson).send(res);
-  }
+    try {
+      const lesson = await LessonRepo.findLessonByID(req.params.id);
+      if (!lesson) throw new InternalErrorResponse('Blog does not exists');
+      if (!lesson.owner.equals(res.locals.payload))
+        throw new InternalErrorResponse('You are not permitted to update');
+      if (req.body.courseTitle) lesson.courseTitle = req.body.courseTitle;
+      if (req.body.category) lesson.category = req.body.category;
+      if (req.body.courseContent) lesson.courseContent = req.body.courseContent;
+      if (req.body.description) lesson.description = req.body.description;
+      await LessonRepo.findAndUpdateLesson(lesson);
+      new SuccessResponse(201, 'Lesson updated successfully', lesson).send(res);
+    } catch (e) {
+      return new ErrorResponse(500, e).send(res);
+    }
+  },
+);
+
+export const getAllPublished = router.get(
+  '/published/all',
+  isAuthenticated,
+  async (req: Request, res: Response) => {
+    const id = res.locals.payload;
+    try {
+      const findUser = await UserRepo.findUserByID(id);
+      if (!findUser) throw new InternalErrorResponse('Unauthorized Access');
+      if (findUser.roles != 'TUTOR') {
+        throw new InternalErrorResponse('You are not a tutor');
+      }
+      const lessons = await LessonRepo.findAllPublishedLessons(id);
+      if (!lessons)
+        throw new InternalErrorResponse(
+          'You do not have any published lessons',
+        );
+      new SuccessResponse(200, 'Fetched Lessons', lessons).send(res);
+    } catch (e) {
+      return new ErrorResponse(500, e).send(res);
+    }
+  },
+);
+
+export const getAllDrafts = router.get(
+  '/drafts/all',
+  isAuthenticated,
+  async (req: Request, res: Response) => {
+    const id = res.locals.payload;
+    try {
+      const findUser = await UserRepo.findUserByID(id);
+      if (!findUser) throw new InternalErrorResponse('Unauthorized Access');
+      const lessons = await LessonRepo.findAllDraftedLessons(id);
+      if (!lessons)
+        throw new InternalErrorResponse(
+          'You do not have any published lessons',
+        );
+      new SuccessResponse(200, 'All Your Drafts', lessons).send(res);
+    } catch (e) {
+      return new ErrorResponse(500, e).send(res);
+    }
+  },
+);
+
+export const publishLesson = router.put(
+  '/publish/:id',
+  isAuthenticated,
+  async (req: Request, res: Response) => {
+    try {
+      const lesson = await LessonRepo.findLessonByID(req.params.id);
+      if (!lesson) throw new InternalErrorResponse('Blog does not exists');
+      if (!lesson.owner.equals(res.locals.payload))
+        throw new InternalErrorResponse('You are not permitted to update');
+      lesson.isPublished = true;
+      await LessonRepo.findAndUpdateLesson(lesson);
+      new SuccessResponse(201, 'Lesson updated successfully', lesson).send(res);
+    } catch (e) {
+      return new ErrorResponse(500, e).send(res);
+    }
+  },
 );

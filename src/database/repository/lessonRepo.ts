@@ -1,4 +1,6 @@
 import Lesson, { lessonModel } from '../model/Lesson';
+import UserRepo from './userRepo';
+import { InternalErrorResponse } from 'core/response';
 
 export default class LessonRepo {
   public static async Create(lesson: Lesson): Promise<Lesson> {
@@ -20,7 +22,35 @@ export default class LessonRepo {
     return lessonModel.findOne({ _id: id }).lean<Lesson>().exec();
   }
 
-  public static findAndUpdateLesson(lesson: Lesson): Promise<any> {
+  public static async findAllPublishedLessons(
+    id: string,
+  ): Promise<Lesson[] | null> {
+    const findUser = await UserRepo.findUserByID(id);
+    if (findUser) {
+      return lessonModel
+        .find({ owner: findUser, isPublished: true })
+        .lean<Lesson>()
+        .exec();
+    }
+    return null;
+  }
+
+  public static async findAllDraftedLessons(
+    id: string,
+  ): Promise<Lesson[] | null> {
+    const findUser = await UserRepo.findUserByID(id);
+    if (findUser) {
+      return lessonModel
+        .find({ owner: findUser, isPublished: false })
+        .lean<Lesson>()
+        .exec();
+    }
+    return null;
+  }
+
+  public static findAndUpdateLesson(
+    lesson: Lesson,
+  ): Promise<Lesson | Lesson[] | null> {
     lesson.updatedAt = new Date();
     return lessonModel
       .updateOne({ _id: lesson._id }, { $set: { ...lesson } })

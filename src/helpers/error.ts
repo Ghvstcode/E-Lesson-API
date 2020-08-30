@@ -7,7 +7,13 @@ export default (
   response: Response,
   next: NextFunction,
 ): Response => {
-  return response.status(error.statusCode).send({
+  let statusCode: number;
+  if (!error.statusCode) {
+    statusCode = 401;
+  } else {
+    statusCode = error.statusCode;
+  }
+  return response.status(statusCode).send({
     status: error.status,
     statusCode: error.statusCode,
     message: error.message,
